@@ -31,14 +31,6 @@ const mongoClient = new MongoClient(
                 "fle.people": {
                     "bsonType": "object",
                     "encryptMetadata": {
-                        // "keyId": [
-                        //     {
-                        //         "$binary": {
-                        //             "base64": BASE64_KEY_ID,
-                        //             "subType": 4
-                        //         }
-                        //     }
-                        // ]
                         "keyId": [new MongoDB.Binary(Buffer.from(BASE64_KEY_ID, "base64"), 4)]
                     },
                     "properties": {
@@ -87,6 +79,30 @@ server.get("/people", async (request, response, next) => {
 server.get("/person/email/:email", async (request, response, next) => {
     let person = await collection.findOne({ "email": request.params.email });
     response.send(person);
+});
+
+/*
+ * Accept a document id and a payload. The first document found will be updated based on the content 
+ * in the payload. Any fields defined in the schema for encryption will be automatically encrypted.
+ */
+server.put("/person/:id", async (request, response, next) => {
+    let result = await collection.updateOne(
+        {
+            "_id": MongoDB.ObjectID(request.params.id)
+        },
+        {
+            "$set": request.body
+        }
+    );
+    response.send(result);
+});
+
+/*
+ * Delete a document based on a document id passed by the client.
+ */
+server.delete("/person/:id", async (request, response, next) => {
+    let result = await collection.deleteOne({ "_id": MongoDB.ObjectID(request.params.id) });
+    response.send(result);
 });
 
 /*
