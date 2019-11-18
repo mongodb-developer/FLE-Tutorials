@@ -1,0 +1,16 @@
+{
+    "name": "generate-keys-example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "generate-master.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Nic Raboy",
+    "license": "Apache 2.0",
+    "dependencies": {
+        "mongodb": "^3.3.4",
+        "mongodb-client-encryption": "^0.3.1"
+    }
+}
